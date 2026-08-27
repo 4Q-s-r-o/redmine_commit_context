@@ -52,8 +52,8 @@ jobs:
           RAILS_ENV: test
         run: |
           bundle exec rake db:create
+          bundle exec rake db:migrate
           bundle exec rake redmine:plugins:migrate
-          bundle exec rake db:test:prepare
 
       - name: Run plugin tests
         working-directory: redmine

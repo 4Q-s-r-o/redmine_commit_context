@@ -76,6 +76,11 @@ class IssuesControllerChangesetsTabTest < ActionController::TestCase
 
     assert_select "div#changeset-#{changeset_a.id}"
     assert_select "div#changeset-#{changeset_b.id}"
+    # Same badge label ("shared") on both rows, but the row from the other
+    # project (team-b) must still be distinguishable via its project name,
+    # the way core's own partial prefixes cross-project changesets.
+    assert_select "div#changeset-#{changeset_a.id} .ccx-project", false
+    assert_select "div#changeset-#{changeset_b.id} .ccx-project", :text => project_b.name
     assert_match(/2 revisions/, @response.body.gsub(/\s+/, ' '))
   end
 

@@ -13,10 +13,11 @@
 .ccx-row {
   display: flex;
   align-items: baseline;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   padding: 3px 4px;
   border-bottom: 1px solid #f0f0f0;
+  min-width: 0;
 }
 
 .ccx-row-even {
@@ -25,11 +26,29 @@
 
 .ccx-badge {
   display: inline-block;
+  flex: 0 0 auto;
   font-family: Verdana, sans-serif;
   font-size: 11px;
   padding: 1px 6px;
   border-radius: 3px;
   color: #fff;
+  white-space: nowrap;
+}
+
+.ccx-project {
+  flex: 0 0 auto;
+  font-family: Verdana, sans-serif;
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.ccx-revision,
+.ccx-author,
+.ccx-date,
+.ccx-changes,
+.ccx-diff {
+  flex: 0 0 auto;
   white-space: nowrap;
 }
 
@@ -62,45 +81,20 @@
 .ccx-message {
   font-size: 12px;
   color: #333;
-  flex-basis: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-@media (prefers-color-scheme: dark) {
-  .ccx-header {
-    color: #aaa;
-  }
-
-  .ccx-row {
-    border-bottom-color: #333;
-  }
-
-  .ccx-row-even {
-    background-color: #232323;
-  }
-
-  .ccx-revision a,
-  .ccx-diff a {
-    color: #6ea8d8;
-  }
-
-  .ccx-author,
-  .ccx-date,
-  .ccx-changes {
-    color: #aaa;
-  }
-
-  .ccx-added { color: #5fbf5f; }
-  .ccx-modified { color: #d1bd4a; }
-  .ccx-deleted { color: #e07a7a; }
-
-  .ccx-message {
-    color: #ddd;
-  }
-}
-
-/* Redmine core has no built-in dark theme; some third-party theme plugins
-   add a "theme-dark" (or similar) class to <body>. This is a best-effort
-   fallback for that common pattern — verify against the actual theme in use. */
+/* Redmine core has no built-in dark theme and does not switch on the OS
+   `prefers-color-scheme`; a media-query fallback would apply dark colors
+   on top of Redmine's light chrome whenever the OS is set to dark, which
+   is worse than doing nothing. Some third-party theme plugins add a
+   "theme-dark" (or similar) class to <body> instead — this is a
+   best-effort fallback for that pattern; verify the actual class name
+   against the theme in use before relying on it. */
 body.theme-dark .ccx-header {
   color: #aaa;
 }

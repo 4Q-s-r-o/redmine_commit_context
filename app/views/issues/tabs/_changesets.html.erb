@@ -19,6 +19,9 @@
     ccx_has_changes = ccx_counts.values.sum > 0
   %>
   <div id="changeset-<%= changeset.id %>" class="ccx-row <%= index.even? ? 'ccx-row-even' : 'ccx-row-odd' %>">
+    <% if changeset.project != project %>
+      <span class="ccx-project"><%= h(changeset.project.name) %></span>
+    <% end %>
     <span class="ccx-badge ccx-badge-<%= ccx_color_index %>" title="<%= h(ccx_identifier) %>"><%= h(ccx_identifier) %></span>
     <span class="ccx-revision"><%= link_to_revision(changeset, changeset.repository, :text => changeset.revision.to_s[0, 8]) %></span>
     <span class="ccx-author"><%= h(ccx_author_name) %></span>
@@ -41,5 +44,6 @@
     <% end %>
     <span class="ccx-message"><%= h(ccx_message) %></span>
   </div>
+  <%= call_hook(:view_issues_history_changeset_bottom, { :changeset => changeset }) %>
 <% end %>
 </div>

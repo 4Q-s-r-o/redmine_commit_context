@@ -12,9 +12,14 @@ Each revision is rendered as a single row:
 
 with a header showing `N revisions · M repositories`.
 
-![screenshot placeholder](docs/screenshot-placeholder.png)
+_Screenshot pending — add one at `docs/screenshot.png` and link it here once
+the plugin has run against a real instance._
 
 ## Installation
+
+`<ORG>` below is a placeholder (see `init.rb`'s `url` and this repository's
+own remote) — replace it with the actual GitHub org/user this plugin is
+published under before running the clone command.
 
 ```sh
 cd redmine/plugins
@@ -57,6 +62,10 @@ core) — the plugin's `app/views` directory is searched before core's, so a
 file at the same relative path overrides it. No core file is patched and no
 `alias_method_chain` is used.
 
+The override still calls `call_hook(:view_issues_history_changeset_bottom, changeset: changeset)`
+after each row, exactly where core calls it — any other installed plugin
+that relies on that hook to append content per changeset keeps working.
+
 **What to check on every Redmine upgrade:** diff this file against the
 corresponding `app/views/issues/tabs/_changesets.html.erb` in the new
 Redmine version. Between 6.0 and 6.1 the only change was CSS class
@@ -80,11 +89,15 @@ plugin will need updating.
 - Repository badge colors are derived deterministically from the
   displayed identifier (`Digest::MD5.hexdigest(identifier).to_i(16) % 8`),
   so the same repository always gets the same color across reloads and
-  users. If a repository has no `identifier` set, the badge falls back to
-  the basename of its `url` — two repositories with an empty identifier
-  and the same basename (e.g. `.../team-a/shared.git` and
-  `.../team-b/shared.git`) will show the same badge label and color; set
-  an explicit repository identifier to disambiguate.
+  users. Repository identifiers are only unique *within* a project, so two
+  repositories in different projects with the same identifier (or the same
+  URL basename fallback, e.g. `.../team-a/shared.git` and
+  `.../team-b/shared.git`) show an identical badge. When a changeset
+  belongs to a different project than the issue itself, the row also shows
+  that project's name — the same disambiguation core's own partial uses —
+  so same-looking badges from different projects stay distinguishable. Set
+  an explicit, project-unique repository identifier to also make the badge
+  text itself differ.
 
 Everything is read from the Redmine database. Nothing shells out to `git`,
 and nothing touches branches, deployment status, or code review data.
