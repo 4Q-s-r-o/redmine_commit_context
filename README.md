@@ -17,13 +17,9 @@ the plugin has run against a real instance._
 
 ## Installation
 
-`<ORG>` below is a placeholder (see `init.rb`'s `url` and this repository's
-own remote) — replace it with the actual GitHub org/user this plugin is
-published under before running the clone command.
-
 ```sh
 cd redmine/plugins
-git clone https://github.com/<ORG>/redmine_commit_context.git
+git clone https://github.com/4Q-s-r-o/redmine_commit_context.git
 cd ..
 bundle install
 ```
