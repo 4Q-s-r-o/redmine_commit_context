@@ -1,0 +1,14 @@
+sk:
+  commit_context:
+    label_summary: "%{revisions} · %{repositories}"
+    label_revisions_count:
+      zero: "žiadne revízie"
+      one: "1 revízia"
+      few: "%{count} revízie"
+      other: "%{count} revízií"
+    label_repositories_count:
+      zero: "0 repozitárov"
+      one: "1 repozitár"
+      few: "%{count} repozitáre"
+      other: "%{count} repozitárov"
+    label_diff: "diff"

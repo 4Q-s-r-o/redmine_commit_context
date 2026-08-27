@@ -1,0 +1,62 @@
+name: test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        redmine: ['6.0-stable', '6.1-stable']
+        ruby: ['3.3']
+
+    steps:
+      - name: Checkout Redmine
+        uses: actions/checkout@v4
+        with:
+          repository: redmine/redmine
+          ref: ${{ matrix.redmine }}
+          path: redmine
+
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+        with:
+          path: redmine/plugins/redmine_commit_context
+
+      - name: Configure database (sqlite3)
+        working-directory: redmine
+        run: |
+          cat > config/database.yml <<EOF
+          test:
+            adapter: sqlite3
+            database: db/test.sqlite3
+          EOF
+
+      - name: Configure application settings
+        working-directory: redmine
+        run: cp config/configuration.yml.example config/configuration.yml
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+          working-directory: redmine
+
+      - name: Prepare database
+        working-directory: redmine
+        env:
+          RAILS_ENV: test
+        run: |
+          bundle exec rake db:create
+          bundle exec rake redmine:plugins:migrate
+          bundle exec rake db:test:prepare
+
+      - name: Run plugin tests
+        working-directory: redmine
+        env:
+          RAILS_ENV: test
+        run: bundle exec rake redmine:plugins:test NAME=redmine_commit_context

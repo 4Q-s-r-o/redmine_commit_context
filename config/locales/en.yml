@@ -1,0 +1,12 @@
+en:
+  commit_context:
+    label_summary: "%{revisions} · %{repositories}"
+    label_revisions_count:
+      zero: "no revisions"
+      one: "1 revision"
+      other: "%{count} revisions"
+    label_repositories_count:
+      zero: "0 repositories"
+      one: "1 repository"
+      other: "%{count} repositories"
+    label_diff: "diff"

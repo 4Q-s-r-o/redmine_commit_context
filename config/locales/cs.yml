@@ -1,0 +1,14 @@
+cs:
+  commit_context:
+    label_summary: "%{revisions} · %{repositories}"
+    label_revisions_count:
+      zero: "žádné revize"
+      one: "1 revize"
+      few: "%{count} revize"
+      other: "%{count} revizí"
+    label_repositories_count:
+      zero: "0 repozitářů"
+      one: "1 repozitář"
+      few: "%{count} repozitáře"
+      other: "%{count} repozitářů"
+    label_diff: "diff"

@@ -1,0 +1,133 @@
+.ccx-header {
+  font-family: Verdana, sans-serif;
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.ccx-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ccx-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 3px 4px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.ccx-row-even {
+  background-color: #fafafa;
+}
+
+.ccx-badge {
+  display: inline-block;
+  font-family: Verdana, sans-serif;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.ccx-badge-0 { background-color: #6b7fa3; }
+.ccx-badge-1 { background-color: #a37f6b; }
+.ccx-badge-2 { background-color: #6ba38c; }
+.ccx-badge-3 { background-color: #9a6ba3; }
+.ccx-badge-4 { background-color: #a3956b; }
+.ccx-badge-5 { background-color: #6b96a3; }
+.ccx-badge-6 { background-color: #a36b6b; }
+.ccx-badge-7 { background-color: #7f6ba3; }
+
+.ccx-revision a,
+.ccx-diff a {
+  color: #169;
+}
+
+.ccx-author,
+.ccx-date,
+.ccx-changes {
+  font-family: Verdana, sans-serif;
+  font-size: 11px;
+  color: #666;
+}
+
+.ccx-added { color: #2a8f2a; }
+.ccx-modified { color: #8a7a1a; }
+.ccx-deleted { color: #b03030; }
+
+.ccx-message {
+  font-size: 12px;
+  color: #333;
+  flex-basis: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .ccx-header {
+    color: #aaa;
+  }
+
+  .ccx-row {
+    border-bottom-color: #333;
+  }
+
+  .ccx-row-even {
+    background-color: #232323;
+  }
+
+  .ccx-revision a,
+  .ccx-diff a {
+    color: #6ea8d8;
+  }
+
+  .ccx-author,
+  .ccx-date,
+  .ccx-changes {
+    color: #aaa;
+  }
+
+  .ccx-added { color: #5fbf5f; }
+  .ccx-modified { color: #d1bd4a; }
+  .ccx-deleted { color: #e07a7a; }
+
+  .ccx-message {
+    color: #ddd;
+  }
+}
+
+/* Redmine core has no built-in dark theme; some third-party theme plugins
+   add a "theme-dark" (or similar) class to <body>. This is a best-effort
+   fallback for that common pattern — verify against the actual theme in use. */
+body.theme-dark .ccx-header {
+  color: #aaa;
+}
+
+body.theme-dark .ccx-row {
+  border-bottom-color: #333;
+}
+
+body.theme-dark .ccx-row-even {
+  background-color: #232323;
+}
+
+body.theme-dark .ccx-revision a,
+body.theme-dark .ccx-diff a {
+  color: #6ea8d8;
+}
+
+body.theme-dark .ccx-author,
+body.theme-dark .ccx-date,
+body.theme-dark .ccx-changes {
+  color: #aaa;
+}
+
+body.theme-dark .ccx-added { color: #5fbf5f; }
+body.theme-dark .ccx-modified { color: #d1bd4a; }
+body.theme-dark .ccx-deleted { color: #e07a7a; }
+
+body.theme-dark .ccx-message {
+  color: #ddd;
+}

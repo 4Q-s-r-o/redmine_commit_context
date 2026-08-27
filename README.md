@@ -1,2 +1,108 @@
 # redmine_commit_context
-Better commit information for redmine in "associated revisions"
+
+Compact, one-line rendering of the "Associated revisions" tab on the Redmine
+issue view. Built for setups with many git mirror repositories attached to
+projects, where the default two-line-per-revision layout — with no
+indication of which repository a commit belongs to — becomes unusable once
+an issue accumulates commits across several repositories.
+
+Each revision is rendered as a single row:
+
+`[repo-badge] [short sha] [author] [date time] +A ~M −D [diff] commit message`
+
+with a header showing `N revisions · M repositories`.
+
+![screenshot placeholder](docs/screenshot-placeholder.png)
+
+## Installation
+
+```sh
+cd redmine/plugins
+git clone https://github.com/<ORG>/redmine_commit_context.git
+cd ..
+bundle install
+```
+
+No database migrations are required — the plugin does not add any tables,
+it only reads existing changeset/repository data. Restart Redmine after
+installing.
+
+## Compatibility
+
+Tested in CI against Redmine `6.0-stable` and `6.1-stable` (see
+`.github/workflows/test.yml`). Requires Redmine 6.0 or higher
+(`requires_redmine version_or_higher: '6.0.0'` in `init.rb`).
+
+`7.0-stable` exists upstream at the time of writing but has not been
+verified against this plugin — check the view override note below before
+relying on it there.
+
+## View override — read before upgrading Redmine
+
+Redmine core does not expose a hook that allows replacing (only appending
+to) the rendering of each revision in the "Associated revisions" tab. The
+only hook available there, `view_issues_history_changeset_bottom`, fires
+*after* the default two-line block for each changeset has already been
+rendered — it cannot suppress or restructure that output. Because the goal
+of this plugin is a full one-line replacement of that layout, it overrides
+the core partial directly:
+
+```
+app/views/issues/tabs/_changesets.html.erb
+```
+
+This works through Redmine's own plugin loading mechanism
+(`ActionController::Base.prepend_view_path`, see `lib/redmine/plugin.rb` in
+core) — the plugin's `app/views` directory is searched before core's, so a
+file at the same relative path overrides it. No core file is patched and no
+`alias_method_chain` is used.
+
+**What to check on every Redmine upgrade:** diff this file against the
+corresponding `app/views/issues/tabs/_changesets.html.erb` in the new
+Redmine version. Between 6.0 and 6.1 the only change was CSS class
+renaming; a future version could change the controller contract (locals
+passed into the partial: `changesets`, `project`), the permission checks,
+or add fields the override should also expose. If `_changesets.html.erb`
+no longer exists at that path, the tab has been restructured and this
+plugin will need updating.
+
+## How the data is loaded
+
+- `IssuesController#issue_tab` already preloads `repository` and `user` on
+  the changeset list (`preload(:repository, :user)`), so there is no N+1
+  there.
+- It does **not** preload `filechanges`. Since the controller cannot be
+  patched, the plugin fetches file-change counts for the whole visible
+  changeset list in a single aggregated query
+  (`Change.where(changeset_id: ids).group(:changeset_id, :action).count`,
+  see `lib/redmine_commit_context/change_stats.rb`) instead of calling
+  `changeset.filechanges` per row.
+- Repository badge colors are derived deterministically from the
+  displayed identifier (`Digest::MD5.hexdigest(identifier).to_i(16) % 8`),
+  so the same repository always gets the same color across reloads and
+  users. If a repository has no `identifier` set, the badge falls back to
+  the basename of its `url` — two repositories with an empty identifier
+  and the same basename (e.g. `.../team-a/shared.git` and
+  `.../team-b/shared.git`) will show the same badge label and color; set
+  an explicit repository identifier to disambiguate.
+
+Everything is read from the Redmine database. Nothing shells out to `git`,
+and nothing touches branches, deployment status, or code review data.
+
+## Testing
+
+```sh
+bundle exec rake redmine:plugins:test NAME=redmine_commit_context
+```
+
+Run from the Redmine root, with the plugin checked out under `plugins/`.
+
+## Planned (out of scope for this MVP)
+
+- Deployment badge derived from git tags in the `<environment>/<version>`
+  format.
+- Filtering the revisions list by repository.
+
+## License
+
+GPL-2.0, same as Redmine core. See `LICENSE`.
