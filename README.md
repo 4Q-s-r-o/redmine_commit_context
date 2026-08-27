@@ -12,8 +12,9 @@ Each revision is rendered as a single row:
 
 with a header showing `N revisions · M repositories`.
 
-_Screenshot pending — add one at `docs/screenshot.png` and link it here once
-the plugin has run against a real instance._
+![Associated revisions rendered by redmine_commit_context](docs/screenshot.jpg)
+
+*Twelve revisions across three repositories and two projects on a single issue.*
 
 ## Installation
 
