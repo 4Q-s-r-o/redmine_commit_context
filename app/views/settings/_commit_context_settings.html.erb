@@ -1,8 +1,8 @@
 <p>
-  <label>
-    <%= check_box_tag 'settings[show_project_prefix]', '1', settings['show_project_prefix'] == '1' %>
-    <%= l(:'commit_context.setting_show_project_prefix') %>
-  </label>
-  <br>
+  <%= hidden_field_tag 'settings[show_project_prefix]', '0' %>
+  <%= check_box_tag 'settings[show_project_prefix]', '1', settings['show_project_prefix'] == '1' %>
+  <label for="settings_show_project_prefix" class="inline"><%= l(:'commit_context.setting_show_project_prefix') %></label>
+</p>
+<p>
   <em class="info"><%= l(:'commit_context.setting_show_project_prefix_hint') %></em>
 </p>
