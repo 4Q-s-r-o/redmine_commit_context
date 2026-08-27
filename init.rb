@@ -5,7 +5,7 @@ Redmine::Plugin.register :redmine_commit_context do
   author      'Martin Hlavňa (4Q)'
   description 'Kompaktné zobrazenie asociovaných revízií s identifikátorom repozitára, autorom a rozsahom zmien'
   version     '0.2.0'
-  url         'https://github.com/<ORG>/redmine_commit_context'
+  url         'https://github.com/4Q-s-r-o/redmine_commit_context.git'
   requires_redmine version_or_higher: '6.0.0'
 
   settings :default => { 'show_project_prefix' => '1' },
