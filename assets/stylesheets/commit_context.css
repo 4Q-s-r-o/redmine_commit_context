@@ -13,7 +13,7 @@
 .ccx-row {
   display: flex;
   align-items: baseline;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 6px;
   padding: 3px 4px;
   border-bottom: 1px solid #f0f0f0;
@@ -78,14 +78,18 @@
 .ccx-modified { color: #8a7a1a; }
 .ccx-deleted { color: #b03030; }
 
+/* flex-grow with a generous min-width means the message tries to share the
+   row with the other columns; once available space drops below that
+   min-width it wraps as a whole onto its own full-width line instead of
+   being truncated. */
 .ccx-message {
   font-size: 12px;
   color: #333;
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  flex: 1 1 260px;
+  min-width: 260px;
+  white-space: normal;
+  word-break: break-word;
+  padding-bottom: 4px;
 }
 
 /* Redmine core has no built-in dark theme and does not switch on the OS

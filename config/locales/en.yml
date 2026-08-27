@@ -10,3 +10,5 @@ en:
       one: "1 repository"
       other: "%{count} repositories"
     label_diff: "diff"
+    setting_show_project_prefix: "Show project name for revisions from other projects"
+    setting_show_project_prefix_hint: "When disabled, revisions from a project other than the current issue's are shown without their project name prefix."

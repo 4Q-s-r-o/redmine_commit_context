@@ -12,3 +12,5 @@ cs:
       few: "%{count} repozitáře"
       other: "%{count} repozitářů"
     label_diff: "diff"
+    setting_show_project_prefix: "Zobrazovat název projektu u revizí z jiného projektu"
+    setting_show_project_prefix_hint: "Pokud je vypnuto, revize z jiného projektu, než je aktuální úloha, se zobrazí bez prefixu s názvem projektu."

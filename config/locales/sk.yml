@@ -12,3 +12,5 @@ sk:
       few: "%{count} repozitáre"
       other: "%{count} repozitárov"
     label_diff: "diff"
+    setting_show_project_prefix: "Zobrazovať názov projektu pri revíziách z iného projektu"
+    setting_show_project_prefix_hint: "Ak je vypnuté, revízie z iného projektu, než je aktuálna úloha, sa zobrazia bez prefixu s názvom projektu."

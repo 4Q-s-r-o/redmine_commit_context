@@ -1,0 +1,8 @@
+<p>
+  <label>
+    <%= check_box_tag 'settings[show_project_prefix]', '1', settings['show_project_prefix'] == '1' %>
+    <%= l(:'commit_context.setting_show_project_prefix') %>
+  </label>
+  <br>
+  <em class="info"><%= l(:'commit_context.setting_show_project_prefix_hint') %></em>
+</p>
