@@ -20,7 +20,7 @@ module RedmineCommitContext
       controller = context[:controller]
       view = context[:hook_caller]
 
-      scope = RevisionScopes.for_version(version)
+      scope = RedmineCommitContext::RevisionScopes.for_version(version)
       changeset_count = scope.count
       changeset_pages = Paginator.new(changeset_count, controller.send(:per_page_option), controller.params[:page])
       changesets = scope.limit(changeset_pages.per_page).offset(changeset_pages.offset).to_a
@@ -41,7 +41,7 @@ module RedmineCommitContext
     # :view_changesets permission anywhere must never see the entry point.
     def view_issues_sidebar_queries_bottom(context = {})
       controller = context[:controller]
-      return '' unless Permissions.revisions_visible_anywhere?(User.current, context[:project])
+      return '' unless RedmineCommitContext::Permissions.revisions_visible_anywhere?(User.current, context[:project])
 
       view = context[:hook_caller]
       # project_id is a path segment on the project-scoped issues route, not
