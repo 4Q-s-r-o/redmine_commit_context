@@ -14,8 +14,8 @@ cs:
     label_diff: "diff"
     label_revisions: "Revize"
     label_revisions_for_version: "Revize pro %{version}"
-    label_revisions_for_filter: "Revize pro tento filtr"
-    label_show_revisions_for_filter: "Zobrazit revize pro tento filtr"
+    label_revisions_for_filter: "Revize pro úlohy"
+    label_show_revisions_for_filter: "Zobrazit revize"
     label_file_summary: "%{files} v %{repositories}"
     label_files_count:
       zero: "žádné soubory"

@@ -14,8 +14,8 @@ sk:
     label_diff: "diff"
     label_revisions: "Revízie"
     label_revisions_for_version: "Revízie pre %{version}"
-    label_revisions_for_filter: "Revízie pre tento filter"
-    label_show_revisions_for_filter: "Zobraziť revízie pre tento filter"
+    label_revisions_for_filter: "Revízie pre úlohy"
+    label_show_revisions_for_filter: "Zobraziť revízie"
     label_file_summary: "%{files} v %{repositories}"
     label_files_count:
       zero: "žiadne súbory"

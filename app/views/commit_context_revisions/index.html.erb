@@ -27,4 +27,10 @@
   <% end %>
 <% end %>
 
+<% unless @version %>
+  <% content_for :sidebar do %>
+    <%= render :partial => 'issues/sidebar' %>
+  <% end %>
+<% end %>
+
 <% html_title(@version ? l(:'commit_context.label_revisions_for_version', :version => @version.name) : l(:'commit_context.label_revisions_for_filter')) %>

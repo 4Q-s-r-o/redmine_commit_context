@@ -12,8 +12,8 @@ en:
     label_diff: "diff"
     label_revisions: "Revisions"
     label_revisions_for_version: "Revisions for %{version}"
-    label_revisions_for_filter: "Revisions for this filter"
-    label_show_revisions_for_filter: "Show revisions for this filter"
+    label_revisions_for_filter: "Revisions for issues"
+    label_show_revisions_for_filter: "Show revisions"
     label_file_summary: "%{files} in %{repositories}"
     label_files_count:
       zero: "no files"
