@@ -1,0 +1,16 @@
+<div id="ccx-version-revisions">
+  <h3><%= l(:'commit_context.label_revisions') %></h3>
+  <%= render :partial => 'commit_context/revisions', :locals => {
+        :changesets => changesets,
+        :project => version.project,
+        :show_file_summary => true
+      } %>
+  <span class="pagination"><%= pagination_links_full changeset_pages, changeset_count %></span>
+  <% if changeset_count > 0 %>
+    <p class="ccx-csv-export">
+      <%= link_to l(:label_export_to) + ' CSV',
+            commit_context_revisions_path(:version_id => version.id, :format => 'csv'),
+            :class => 'icon icon-download', :rel => 'nofollow' %>
+    </p>
+  <% end %>
+</div>

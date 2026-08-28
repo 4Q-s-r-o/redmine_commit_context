@@ -1,0 +1,21 @@
+<%
+  ccx_file_summary_entries = RedmineCommitContext::FileSummary.for_changesets(changesets)
+  ccx_total_files = RedmineCommitContext::FileSummary.total_files(ccx_file_summary_entries)
+%>
+<% if ccx_file_summary_entries.any? %>
+<details class="ccx-file-summary">
+  <summary>
+    <%= l(:'commit_context.label_file_summary',
+          :files => l(:'commit_context.label_files_count', :count => ccx_total_files),
+          :repositories => l(:'commit_context.label_repositories_count', :count => ccx_file_summary_entries.size)) %>
+  </summary>
+  <ul class="ccx-file-summary-list">
+    <% ccx_file_summary_entries.each do |entry| %>
+      <li>
+        <span class="ccx-file-summary-repo"><%= h(RedmineCommitContext::RepositoryBadge.identifier_for(entry.repository)) %></span>
+        <span class="ccx-file-summary-count"><%= l(:'commit_context.label_files_count', :count => entry.file_count) %></span>
+      </li>
+    <% end %>
+  </ul>
+</details>
+<% end %>

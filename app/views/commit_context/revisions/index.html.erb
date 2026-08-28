@@ -1,0 +1,30 @@
+<h2>
+  <% if @version %>
+    <%= l(:'commit_context.label_revisions_for_version', :version => @version.name) %>
+  <% else %>
+    <%= l(:'commit_context.label_revisions_for_filter') %>
+  <% end %>
+</h2>
+
+<% if @version %>
+  <p><%= link_to l(:label_version), version_path(@version) %></p>
+<% else %>
+  <%= form_tag(commit_context_revisions_path, :method => :get, :id => 'query_form') do %>
+    <%= render :partial => 'queries/query_form' %>
+  <% end %>
+<% end %>
+
+<% if @query.nil? || @query.valid? %>
+  <%= render :partial => 'commit_context/revisions', :locals => {
+        :changesets => @changesets,
+        :project => @project,
+        :show_file_summary => true
+      } %>
+  <span class="pagination"><%= pagination_links_full @changeset_pages, @changeset_count %></span>
+
+  <% other_formats_links do |f| %>
+    <%= f.link_to_with_query_parameters 'CSV' %>
+  <% end %>
+<% end %>
+
+<% html_title(@version ? l(:'commit_context.label_revisions_for_version', :version => @version.name) : l(:'commit_context.label_revisions_for_filter')) %>
