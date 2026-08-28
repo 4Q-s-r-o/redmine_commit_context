@@ -1,8 +1,10 @@
 <%
   # Shared revisions list, used by the issue "Associated revisions" tab, the
   # version show page, and the filtered-revisions page. Behavior/markup for
-  # the issue tab must stay byte-identical to the pre-refactor version, so
-  # any addition here is opt-in via local_assigns (after_row, show_file_summary).
+  # the issue tab stays byte-identical to the pre-refactor version, so any
+  # addition here is opt-in via local_assigns (after_row, show_file_summary)
+  # -- except the message's #123-style issue links below, which apply
+  # everywhere on purpose.
   ccx_changesets = changesets.to_a
   ccx_stats = RedmineCommitContext::ChangeStats.for_changesets(ccx_changesets)
   ccx_repository_count = ccx_changesets.map(&:repository_id).uniq.size
@@ -24,7 +26,12 @@
     ccx_counts = ccx_stats[changeset.id] || RedmineCommitContext::ChangeStats::EMPTY_COUNTS
     ccx_author = changeset.author
     ccx_author_name = ccx_author.is_a?(String) ? ccx_author : ccx_author.name
-    ccx_message = changeset.comments.to_s.each_line.first.to_s.strip
+    ccx_message_text = changeset.comments.to_s.each_line.first.to_s.strip
+    # :formatting => false skips wiki markup (bold/italic/headings) but
+    # parse_redmine_links still runs, turning #123 into a permission-checked
+    # link to that issue (Issue.visible internally) -- exactly the "clickable
+    # issue reference" behavior, without turning this into a full wiki blob.
+    ccx_message = textilizable(ccx_message_text, :object => changeset, :project => changeset.project, :formatting => false)
     ccx_has_changes = ccx_counts.values.sum > 0
     ccx_show_project_prefix = Setting.plugin_redmine_commit_context['show_project_prefix'] != '0'
   %>
@@ -52,7 +59,7 @@
                      :rev => changeset.identifier) %>
       </span>
     <% end %>
-    <span class="ccx-message"><%= h(ccx_message) %></span>
+    <span class="ccx-message"><%= ccx_message %></span>
   </div>
   <%= ccx_after_row.call(changeset) if ccx_after_row %>
 <% end %>

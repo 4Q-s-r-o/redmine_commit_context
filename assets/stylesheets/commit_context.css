@@ -92,6 +92,10 @@
   padding-bottom: 4px;
 }
 
+.ccx-message a {
+  color: #169;
+}
+
 .ccx-file-summary {
   font-family: Verdana, sans-serif;
   font-size: 11px;
@@ -143,7 +147,8 @@ body.theme-dark .ccx-row-even {
 }
 
 body.theme-dark .ccx-revision a,
-body.theme-dark .ccx-diff a {
+body.theme-dark .ccx-diff a,
+body.theme-dark .ccx-message a {
   color: #6ea8d8;
 }
 

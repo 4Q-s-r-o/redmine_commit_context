@@ -60,6 +60,28 @@ class IssuesControllerChangesetsTabTest < ActionController::TestCase
     assert_match(/&lt;script&gt;/, @response.body)
   end
 
+  def test_commit_message_issue_reference_is_a_link_to_the_visible_issue
+    referenced_issue = Issue.find(1) # fixture issue, visible to jsmith
+    issue, changeset = build_issue_with_changeset(:comments => "Fixes ##{referenced_issue.id}")
+
+    get_changesets_tab(issue)
+
+    assert_select "div#changeset-#{changeset.id} .ccx-message a[href=?]", "/issues/#{referenced_issue.id}"
+  end
+
+  def test_commit_message_issue_reference_to_a_non_visible_issue_is_not_linked
+    other_project = Project.generate!(:is_public => false)
+    other_project.trackers = Tracker.all
+    other_project.save!
+    non_visible_issue = Issue.generate!(:project => other_project)
+    issue, changeset = build_issue_with_changeset(:comments => "See ##{non_visible_issue.id}")
+
+    get_changesets_tab(issue)
+
+    assert_select "div#changeset-#{changeset.id} .ccx-message a[href=?]", "/issues/#{non_visible_issue.id}", false
+    assert_select "div#changeset-#{changeset.id} .ccx-message", :text => "See ##{non_visible_issue.id}"
+  end
+
   def test_two_repositories_with_same_basename_in_different_directories_are_both_shown
     project_a = create_project
     project_b = create_project

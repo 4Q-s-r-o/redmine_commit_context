@@ -6,12 +6,13 @@
   every revision linked to an issue that belongs to the version, using the
   same compact one-line rendering as the issue tab. Paginated; includes a
   CSV export link.
-- Revisions for a filter: a new "Show revisions for this filter" link in the
-  issues index sidebar opens a page listing the revisions linked to the
-  issues matched by the current filter — including saved queries
-  (`query_id`), ad-hoc URL filters, and cross-module tag filters such as
-  `sprint:current`. Filtering itself is entirely delegated to `IssueQuery`,
-  the same way `IssuesController` does it.
+- Revisions for issues: a new "Show revisions" link, under a "Revisions"
+  heading in the issues index sidebar, opens a page listing the revisions
+  linked to the issues matched by the current filter — including saved
+  queries (`query_id`), ad-hoc URL filters, and cross-module tag filters
+  such as `sprint:current`. Filtering itself is entirely delegated to
+  `IssueQuery`, the same way `IssuesController` does it. That page also
+  shows the saved-queries sidebar, so it navigates like the issues list.
 - Both new pages show an aggregated "N files in M repositories" summary
   above the revisions list, with a collapsible per-repository breakdown.
 - Both new pages support CSV export (`repository, revision, author, date,
@@ -19,7 +20,10 @@
   the HTML view.
 - The issue tab's rendering logic has been extracted into a shared partial
   (`commit_context/_revisions`), reused by the new version and filter
-  pages. The issue tab itself is unchanged.
+  pages. Its markup is unchanged, with one deliberate exception: `#123`-style
+  issue references in the commit message are now clickable links to that
+  issue (permission-checked, same as everywhere else in Redmine) — this
+  applies everywhere the shared partial is used, issue tab included.
 - The sidebar link and the new controller both independently re-check
   `:view_changesets` — the permission that already governs which
   changesets `Changeset.visible` returns — before showing anything.
