@@ -2,7 +2,7 @@ module RedmineCommitContext
   class Hooks < Redmine::Hook::ViewListener
     # Loads the plugin stylesheet only on the controllers that render one of
     # this plugin's views.
-    STYLESHEET_CONTROLLERS = %w[issues versions commit_context/revisions].freeze
+    STYLESHEET_CONTROLLERS = %w[issues versions commit_context_revisions].freeze
 
     def view_layouts_base_html_head(context = {})
       return '' unless STYLESHEET_CONTROLLERS.include?(context[:controller]&.controller_path)
@@ -22,7 +22,10 @@ module RedmineCommitContext
 
       scope = RedmineCommitContext::RevisionScopes.for_version(version)
       changeset_count = scope.count
-      changeset_pages = Paginator.new(changeset_count, controller.send(:per_page_option), controller.params[:page])
+      # Paginator is Redmine::Pagination::Paginator; bare `Paginator` only
+      # resolves in classes that `include Redmine::Pagination` (every core
+      # controller does via ApplicationController). Hooks doesn't.
+      changeset_pages = Redmine::Pagination::Paginator.new(changeset_count, controller.send(:per_page_option), controller.params[:page])
       changesets = scope.limit(changeset_pages.per_page).offset(changeset_pages.offset).to_a
 
       view.render(

@@ -1,8 +1,8 @@
 require_relative '../../test_helper'
 require 'csv'
 
-class CommitContext::RevisionsControllerTest < ActionController::TestCase
-  tests CommitContext::RevisionsController
+class CommitContextRevisionsControllerTest < ActionController::TestCase
+  tests CommitContextRevisionsController
 
   fixtures :projects, :users, :roles, :members, :member_roles,
            :issues, :issue_statuses, :trackers, :projects_trackers,

@@ -2,7 +2,7 @@ require_relative '../../test_helper'
 
 # The "Show revisions for this filter" sidebar link is added by
 # RedmineCommitContext::Hooks#view_issues_sidebar_queries_bottom. It must be
-# gated the same way as CommitContext::RevisionsController itself -- see
+# gated the same way as CommitContextRevisionsController itself -- see
 # commit_context/revisions_controller_test.rb for the controller-side half
 # of this permission pair.
 class CommitContextSidebarLinkTest < ActionController::TestCase

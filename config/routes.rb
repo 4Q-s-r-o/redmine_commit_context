@@ -7,4 +7,6 @@
 # which calls `clear!` first -- wiping out every route defined before this
 # plugin's routes.rb ran (i.e. all of core's routes). This file must
 # contain bare route statements only.
-get 'commit_context/revisions' => 'commit_context/revisions#index', :as => 'commit_context_revisions'
+# The controller is intentionally not namespaced (see the comment on
+# CommitContextRevisionsController) -- only the URL looks nested.
+get 'commit_context/revisions' => 'commit_context_revisions#index', :as => 'commit_context_revisions'
