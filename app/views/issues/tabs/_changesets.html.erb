@@ -1,50 +1,5 @@
-<%
-  ccx_stats = RedmineCommitContext::ChangeStats.for_changesets(changesets)
-  ccx_repository_count = changesets.map(&:repository_id).uniq.size
-%>
-<div class="ccx-header">
-  <%= l(:'commit_context.label_summary',
-        :revisions => l(:'commit_context.label_revisions_count', :count => changesets.size),
-        :repositories => l(:'commit_context.label_repositories_count', :count => ccx_repository_count)) %>
-</div>
-<div class="ccx-list">
-<% changesets.each_with_index do |changeset, index| %>
-  <%
-    ccx_identifier = RedmineCommitContext::RepositoryBadge.identifier_for(changeset.repository)
-    ccx_color_index = RedmineCommitContext::RepositoryBadge.color_index_for(ccx_identifier)
-    ccx_counts = ccx_stats[changeset.id] || RedmineCommitContext::ChangeStats::EMPTY_COUNTS
-    ccx_author = changeset.author
-    ccx_author_name = ccx_author.is_a?(String) ? ccx_author : ccx_author.name
-    ccx_message = changeset.comments.to_s.each_line.first.to_s.strip
-    ccx_has_changes = ccx_counts.values.sum > 0
-    ccx_show_project_prefix = Setting.plugin_redmine_commit_context['show_project_prefix'] != '0'
-  %>
-  <div id="changeset-<%= changeset.id %>" class="ccx-row <%= index.even? ? 'ccx-row-even' : 'ccx-row-odd' %>">
-    <% if ccx_show_project_prefix && changeset.project != project %>
-      <span class="ccx-project"><%= h(changeset.project.name) %></span>
-    <% end %>
-    <span class="ccx-badge ccx-badge-<%= ccx_color_index %>" title="<%= h(ccx_identifier) %>"><%= h(ccx_identifier) %></span>
-    <span class="ccx-revision"><%= link_to_revision(changeset, changeset.repository, :text => changeset.revision.to_s[0, 8]) %></span>
-    <span class="ccx-author"><%= h(ccx_author_name) %></span>
-    <span class="ccx-date"><%= time_tag(changeset.committed_on) %></span>
-    <span class="ccx-changes">
-      <span class="ccx-added">+<%= ccx_counts[:added] %></span>
-      <span class="ccx-modified">~<%= ccx_counts[:modified] %></span>
-      <span class="ccx-deleted">&minus;<%= ccx_counts[:deleted] %></span>
-    </span>
-    <% if ccx_has_changes && User.current.allowed_to?(:browse_repository, changeset.project) %>
-      <span class="ccx-diff">
-        <%= link_to(l(:'commit_context.label_diff'),
-                     :controller => 'repositories',
-                     :action => 'diff',
-                     :id => changeset.project,
-                     :repository_id => changeset.repository.identifier_param,
-                     :path => '',
-                     :rev => changeset.identifier) %>
-      </span>
-    <% end %>
-    <span class="ccx-message"><%= h(ccx_message) %></span>
-  </div>
-  <%= call_hook(:view_issues_history_changeset_bottom, { :changeset => changeset }) %>
-<% end %>
-</div>
+<%= render :partial => 'commit_context/revisions', :locals => {
+      :changesets => changesets,
+      :project => project,
+      :after_row => ->(changeset) { call_hook(:view_issues_history_changeset_bottom, { :changeset => changeset }) }
+    } %>

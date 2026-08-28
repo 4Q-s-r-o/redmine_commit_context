@@ -92,6 +92,37 @@
   padding-bottom: 4px;
 }
 
+.ccx-file-summary {
+  font-family: Verdana, sans-serif;
+  font-size: 11px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.ccx-file-summary summary {
+  cursor: pointer;
+}
+
+.ccx-file-summary-list {
+  margin: 4px 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.ccx-file-summary-list li {
+  display: flex;
+  gap: 6px;
+}
+
+.ccx-file-summary-repo {
+  font-weight: bold;
+}
+
+.ccx-csv-export {
+  margin-top: 6px;
+  font-size: 11px;
+}
+
 /* Redmine core has no built-in dark theme and does not switch on the OS
    `prefers-color-scheme`; a media-query fallback would apply dark colors
    on top of Redmine's light chrome whenever the OS is set to dark, which
@@ -128,4 +159,8 @@ body.theme-dark .ccx-deleted { color: #e07a7a; }
 
 body.theme-dark .ccx-message {
   color: #ddd;
+}
+
+body.theme-dark .ccx-file-summary {
+  color: #aaa;
 }

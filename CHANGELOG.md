@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.3.0
+
+- Revisions for a version: the version show page (`/versions/:id`) now lists
+  every revision linked to an issue that belongs to the version, using the
+  same compact one-line rendering as the issue tab. Paginated; includes a
+  CSV export link.
+- Revisions for a filter: a new "Show revisions for this filter" link in the
+  issues index sidebar opens a page listing the revisions linked to the
+  issues matched by the current filter — including saved queries
+  (`query_id`), ad-hoc URL filters, and cross-module tag filters such as
+  `sprint:current`. Filtering itself is entirely delegated to `IssueQuery`,
+  the same way `IssuesController` does it.
+- Both new pages show an aggregated "N files in M repositories" summary
+  above the revisions list, with a collapsible per-repository breakdown.
+- Both new pages support CSV export (`repository, revision, author, date,
+  added, modified, deleted, message`), respecting the same permissions as
+  the HTML view.
+- The issue tab's rendering logic has been extracted into a shared partial
+  (`commit_context/_revisions`), reused by the new version and filter
+  pages. The issue tab itself is unchanged.
+- The sidebar link and the new controller both independently re-check
+  `:view_changesets` — the permission that already governs which
+  changesets `Changeset.visible` returns — before showing anything.
+  A user with no repository-viewing permission in any project never sees
+  the link and gets a 403/login redirect on a direct hit.
+
 ## 0.2.0
 
 - New plugin setting "Show project name for revisions from other projects"

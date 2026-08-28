@@ -16,6 +16,38 @@ with a header showing `N revisions · M repositories`.
 
 *Twelve revisions across three repositories and two projects on a single issue.*
 
+## Revisions for a version
+
+The version show page (`/versions/:id`) lists every revision linked to an
+issue belonging to that version — same compact rendering, same file-summary
+header, paginated, with a CSV export link.
+
+![Revisions listed on a version's page](docs/screenshot-version.jpg)
+
+## Revisions for a filter
+
+The issues index sidebar gets a "Show revisions for this filter" link that
+opens a page listing the revisions linked to whatever the current issue
+filter matches — a saved query, an ad-hoc URL filter, or a cross-module tag
+filter like `sprint:current`. Filtering is entirely delegated to
+`IssueQuery`, the same class and the same `retrieve_query` call
+`IssuesController#index` itself uses, so anything that works as an issue
+filter works here without any extra code in this plugin.
+
+![Sidebar link and the filtered revisions page](docs/screenshot-filter.jpg)
+
+Above the list on both pages, an aggregated summary shows how many distinct
+files were touched and across how many repositories (e.g. "40 files in 3
+repositories"), with a collapsible per-repository breakdown.
+
+The link — and the page behind it — only appear for a user who has
+`:view_changesets` in at least one visible project; a direct hit on the URL
+without that permission gets a 403 (or a login redirect for anonymous
+users), independent of whether the link was ever shown. `Changeset.visible`
+is applied to every query behind these pages, so a filter or version that
+spans multiple projects never surfaces a changeset from a repository the
+current user cannot see, even if the linked issue itself is visible to them.
+
 ## Installation
 
 ```sh
@@ -59,9 +91,16 @@ core) — the plugin's `app/views` directory is searched before core's, so a
 file at the same relative path overrides it. No core file is patched and no
 `alias_method_chain` is used.
 
-The override still calls `call_hook(:view_issues_history_changeset_bottom, changeset: changeset)`
-after each row, exactly where core calls it — any other installed plugin
-that relies on that hook to append content per changeset keeps working.
+The override file itself is a thin wrapper: the actual row-by-row rendering
+lives in the shared partial `app/views/commit_context/_revisions.html.erb`,
+reused by the version and filter pages below. The wrapper's own job is just
+to pass through `changesets`/`project` and to call
+`call_hook(:view_issues_history_changeset_bottom, changeset: changeset)`
+after each row, exactly where core calls it, via an `after_row` callback
+the shared partial accepts for this one purpose — any other installed
+plugin that relies on that hook to append content per changeset keeps
+working, and the version/filter pages (which have no such per-issue hook
+context) simply don't pass one.
 
 **What to check on every Redmine upgrade:** diff this file against the
 corresponding `app/views/issues/tabs/_changesets.html.erb` in the new
@@ -71,6 +110,19 @@ passed into the partial: `changesets`, `project`), the permission checks,
 or add fields the override should also expose. If `_changesets.html.erb`
 no longer exists at that path, the tab has been restructured and this
 plugin will need updating.
+
+## Permissions
+
+The version and filter pages, and the sidebar link to the latter, are gated
+on `:view_changesets` rather than `:browse_repository`. This is deliberate:
+`Changeset.visible` — the scope mandatory on every query behind these pages
+— itself filters on `:view_changesets`, so gating the entry point on a
+different permission would decouple what a user can *reach* from what they
+can actually *see* once there. `:browse_repository` is still checked, as
+before, per row, to decide whether that row's diff link is shown.
+
+See `lib/redmine_commit_context/permissions.rb` and
+`lib/redmine_commit_context/revision_scopes.rb`.
 
 ## How the data is loaded
 
