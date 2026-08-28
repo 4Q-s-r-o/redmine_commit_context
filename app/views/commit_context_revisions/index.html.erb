@@ -29,7 +29,7 @@
 
 <% unless @version %>
   <% content_for :sidebar do %>
-    <%= render :partial => 'issues/sidebar' %>
+    <%= render_sidebar_queries(IssueQuery, @project) %>
   <% end %>
 <% end %>
 
