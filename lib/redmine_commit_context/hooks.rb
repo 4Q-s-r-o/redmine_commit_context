@@ -28,6 +28,15 @@ module RedmineCommitContext
       changeset_pages = Redmine::Pagination::Paginator.new(changeset_count, controller.send(:per_page_option), controller.params[:page])
       changesets = scope.limit(changeset_pages.per_page).offset(changeset_pages.offset).to_a
 
+      # Redmine runs with config.action_controller.include_all_helpers =
+      # false, so each controller only gets ApplicationHelper plus whatever
+      # it explicitly declares via `helper :x`. VersionsController never
+      # declares `helper :repositories`, but the shared revisions partial
+      # calls core's link_to_revision, which unconditionally calls
+      # RepositoriesHelper#format_revision. Extend just this view instance
+      # rather than touching VersionsController.
+      view.extend(RepositoriesHelper)
+
       view.render(
         :partial => 'commit_context/version_revisions',
         :locals => {
